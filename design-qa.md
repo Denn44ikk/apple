@@ -1,99 +1,37 @@
-# Design QA
+# Design QA: планировщик, версия 2
 
 ## Evidence
 
-- Source visual truth: `C:\Users\denis\.codex\generated_images\01a0be53-13e9-7032-bef2-0322875ca83e\exec-e5e11aba-d76f-4b8a-92ef-e5b807f65ef4.png`.
-- Implementation: browser-rendered iPhone app at `http://127.0.0.1:4173/`, captured in the in-app browser on 2026-09-20.
-- Source viewport: 853 × 1846 px. Implementation app content: template-owned iPhone screen, 393 × 852 CSS px. The device bezel, status bar, and home indicator are template-owned and excluded from fidelity comparison.
-- Compared state: list view after creating one task, marking it complete, and reordering categories.
+- Source visual truth: `C:\Users\denis\AppData\Local\Temp\codex-clipboard-03384754-c8d8-4872-aefe-37ce32e16b53.png` (243 × 339 px). This is an annotated crop of the desired weekly structure, not a full screen mockup.
+- Implementation: `qa/v2-day.png` and `qa/v2-week.png`, browser rendered iPhone screen at 393 × 852 CSS px, deviceScaleFactor 1, saved at 393 × 852 px.
+- Combined comparison: `qa/comparison.png`, original sketch beside the browser rendered weekly screen, with no density normalization of the sketch because it expresses structure rather than exact pixel dimensions.
+- State: 20 September 2026; day list and week view. The week screenshot is scrolled to its summary and first days so the relevant area is readable.
+- Focused region: source crop and the first day cards in the combined comparison. No app owned raster art appears in either view.
 
 ## Findings
 
-No actionable P0, P1, or P2 differences found for the implemented interactive scope.
+No remaining actionable P0/P1/P2 differences for the requested structural changes.
 
-- Fonts and typography: the display-style title and compact sans-serif task content preserve the source's hierarchy; system-safe fallbacks are used in the prototype.
-- Spacing and layout rhythm: the header, category rail, segmented view switcher, task surface, and floating add control follow the source composition within the smaller template viewport.
-- Colors and visual tokens: warm paper background, navy text, sage primary action, and pale blue/sage/sand category tones are consistent with the source direction.
-- Image and icon fidelity: the source contains no app-owned raster imagery. Standard controls use the Radix UI icon library; mobile device chrome is provided by the protected runtime.
-- Copy and content: Russian labels, category names, task text, and dynamic completion count reflect the product brief.
+- Typography: serif page and section headings remain consistent with the existing planner; task labels, day dates, counts, and percentages use compact sans serif text.
+- Spacing: day groups are separated into category cards; the weekly list uses full width day cards so task names and completion marks remain legible on iPhone.
+- Color: category dots and the sage percentage badges reuse the existing palette. Empty days show a dash rather than an unjustified 0% completion claim.
+- Imagery and icons: the sketch contains annotations, not product artwork. Controls use Radix icons and the protected runtime renders device chrome.
+- Copy: the Plan navigation contains only Plan and Settings. No habit or sleep controls remain in the app UI.
 
-## Interaction evidence
+## Iteration history
 
-- Added the task `Позвонить маме`; it appeared in the list and increased the count from 5 to 6.
-- Switched to `Неделя`; the new task appeared in the weekly view.
-- Marked the new task complete; the completed count changed from 1 of 6 to 2 of 6.
-- Reordered categories; the visible order changed from `Работа, Учёба, Дом` to `Учёба, Дом, Работа`.
-- Switched to `Месяц`; 20 September displayed the updated total of 6 tasks.
+1. First browser capture showed the bottom navigation attached to the scroll content and therefore absent from the visible phone screen. It also showed that the category cards delayed the task list.
+2. Moved navigation to a fixed sibling of `MobileScroll` and reduced category card height and vertical gaps. Post fix evidence: `qa/v2-day.png` and `qa/v2-week.png` show visible navigation and the first day/category content within the screen.
 
-## Follow-up polish
+## Interaction checks
 
-- P3: replace system display typography with a licensed serif family if a final brand font is selected.
+- Four version 2 browser tests passed: category grouping, absence of removed features, per day/week percentage changes, adding a category assigned task without time, and per day completion of recurring tasks.
+- Eight protected mobile runtime browser tests and four Sites worker tests passed. TypeScript/Vite build and mobile runtime integrity check passed.
+- The app was opened and clicked in the Codex in app browser at `http://127.0.0.1:4174/`. The weekly percentage update was visible in the accessibility tree and the rendered screen was inspected.
 
-final result: passed
+## Remaining limitations
 
-## Iteration: sleep-chart calibration
-
-- Removed the Plan header's Today control and moved sleep-goal editing to Habits.
-- Calibrated the weekly chart so bar heights and the dashed goal use the same pixel scale; weekday and hour labels sit below each bar.
-- Verified by clicks: setting an 8-hour goal immediately updates the chart annotation.
-
-final result: passed
-
-## Iteration: final polish
-
-- Standardized habit and task completion marks; compacted the Settings screen.
-- Sleep chart now labels recorded hours and renders a user-configurable dashed sleep-goal line.
-- Verified by clicks: changing the goal to 7.5 hours updates the chart label and rule.
-
-final result: passed
-
-## Iteration: complete habit editing
-
-- Added new-habit creation and deletion controls to the Habits page.
-- Added a guard that keeps at least one habit in the list.
-- Verified by clicks: a new habit appears immediately in the daily plan and disappears from both screens after deletion.
-
-final result: passed
-
-## Iteration: habits in plan
-
-- Moved habit completion controls to the Plan page.
-- Consolidated habit-name editing and sleep/habit statistics under Habits.
-- Removed the standalone Statistics item from bottom navigation and verified the final three-tab navigation by clicks.
-
-final result: passed
-
-## Iteration: habits, sleep and settings
-
-- Added a bottom navigation for Plan, Habits, Statistics and Settings.
-- Added sleep entry and visual sleep/habit statistics, plus a daily habit streak mechanic.
-- Verified by clicks: saving 7.5 hours updates the plan card; a habit toggles; statistics opens; the lilac theme applies.
-
-final result: passed
-
-## Iteration: recurring tasks
-
-- Added daily, weekly, monthly and yearly repeat choices in the task form.
-- Verified by clicks: a daily task created on 20 September is visible on 21 September, in the week and on every subsequent day in the month view.
-- Visual check: the repeated-task calendar cells retain their readable spacing and counts.
-
-final result: passed
-
-## Iteration: planning and category mechanics
-
-- Added date navigation and a date field in the new-task sheet; a task created for 23 September opened immediately in that day and appeared in the date-specific list.
-- Added a category manager with inline rename, up/down ordering, a protected delete action, and creation of a new category.
-- Added task actions for completion and deletion; these are available from each task's overflow control.
-- Browser click checks: created `Оплатить курс` for 23 September, renamed `Дом` to `Личное`, moved it upward, and created `Спорт`.
-- Runtime integrity, TypeScript build, and four Sites packaging tests pass.
-
-final result: passed
-
-## Iteration: placement and task checkboxes
-
-- Prior issue: the floating add control could overlap lower task rows, and the checkbox column appeared visually unstable beside multi-line task text.
-- Fix: moved `Добавить` into the list header beside the task count; set a fixed checkbox column and centred 26px targets within every task row.
-- Post-fix evidence: browser-rendered iPhone screen at `http://127.0.0.1:4173/` on 2026-09-20 shows the compact `Добавить` control in the header and aligned checkbox targets for single- and multi-line tasks.
-- Click test: the relocated `Добавить` control opens the new-task sheet successfully.
+- The supplied reference is a cropped, hand drawn interaction sketch, so exact font, spacing, and color matching is not defined. The vertical day list is an intentional readability adaptation for the 393 px iPhone screen.
+- This is a local version 2 preview; the existing public version has not been updated.
 
 final result: passed
