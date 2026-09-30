@@ -2,162 +2,24 @@
 
 2. Войти под Apple Account.
 
-3. Включить двухфакторную аутентификацию, если Apple попросит это сделать.
+3. Оформить и оплатить Apple Developer Program.
 
-4. Выбрать Individual или Organization.
+4. Дождаться письма Apple о подтверждении.
 
-5. Заполнить данные.
+5. Открыть https://appstoreconnect.apple.com/.
 
-6. Принять условия Apple Developer Program.
+6. Войти под тем же Apple Account.
 
-7. Оплатить членство Apple Developer Program.
+7. Создать приложение с названием «Мой план».
 
-8. Дождаться письма Apple о подтверждении.
+8. Указать Bundle ID: ru.moyplan.planner.
 
-9. Открыть https://appstoreconnect.apple.com/.
+9. Открыть https://appstoreconnect.apple.com/access/integrations/api.
 
-10. Проверить, что открывается раздел Apps.
+10. Создать API Key с ролью App Manager.
 
-11. Открыть https://developer.apple.com/account/resources/members/list.
+11. Скачать файл API-ключа .p8 и сохранить его.
 
-12. Скопировать Team ID.
+12. После получения приглашения установить TestFlight из App Store на iPhone.
 
-13. Открыть https://developer.apple.com/account/resources/certificates/list.
-
-14. Нажать +.
-
-15. Выбрать Apple Distribution.
-
-16. Установить OpenSSL на Windows.
-
-17. Открыть PowerShell в новой пустой папке.
-
-18. Выполнить команду:
-
-   openssl genrsa -out ios_distribution.key 2048
-
-19. Выполнить команду:
-
-   openssl req -new -key ios_distribution.key -out ios_distribution.csr
-
-20. В поле Common Name ввести Мой план Distribution.
-
-21. Остальные поля оставить пустыми и нажимать Enter.
-
-22. Загрузить файл ios_distribution.csr на сайте Apple.
-
-23. Скачать созданный файл сертификата .cer.
-
-24. Выполнить команду:
-
-   openssl x509 -inform DER -in ios_distribution.cer -out ios_distribution.pem
-
-25. Выполнить команду:
-
-   openssl pkcs12 -export -out ios_distribution.p12 -inkey ios_distribution.key -in ios_distribution.pem
-
-26. Ввести и сохранить пароль от файла ios_distribution.p12.
-
-27. Открыть https://developer.apple.com/account/resources/identifiers/list.
-
-28. Нажать +.
-
-29. Выбрать App IDs → App.
-
-30. В поле Description ввести Мой план.
-
-31. В поле Bundle ID ввести ru.moyplan.planner.
-
-32. Нажать Register.
-
-33. Открыть https://developer.apple.com/account/resources/profiles/list.
-
-34. Нажать +.
-
-35. Выбрать App Store.
-
-36. Выбрать App ID Мой план.
-
-37. Выбрать Apple Distribution certificate.
-
-38. Создать и скачать файл provisioning profile .mobileprovision.
-
-39. Открыть https://appstoreconnect.apple.com/access/integrations/api.
-
-40. Нажать Generate API Key.
-
-41. Ввести имя GitHub iOS Build.
-
-42. Выбрать роль App Manager.
-
-43. Нажать Generate.
-
-44. Скопировать Key ID.
-
-45. Скопировать Issuer ID.
-
-46. Скачать файл API-ключа .p8.
-
-47. Открыть https://github.com/Denn44ikk/apple/settings/secrets/actions.
-
-48. Нажать New repository secret.
-
-49. Добавить secret APPLE_TEAM_ID со значением Team ID.
-
-50. В PowerShell выполнить команду для файла ios_distribution.p12:
-
-   [Convert]::ToBase64String([IO.File]::ReadAllBytes('.\ios_distribution.p12'))
-
-51. Скопировать полученную строку.
-
-52. Добавить secret BUILD_CERTIFICATE_BASE64 с этой строкой.
-
-53. Добавить secret P12_PASSWORD с паролем от файла ios_distribution.p12.
-
-54. В PowerShell выполнить команду для файла .mobileprovision:
-
-   [Convert]::ToBase64String([IO.File]::ReadAllBytes('.\ИМЯ_ПРОФИЛЯ.mobileprovision'))
-
-55. Скопировать полученную строку.
-
-56. Добавить secret BUILD_PROVISION_PROFILE_BASE64 с этой строкой.
-
-57. Добавить secret PROVISIONING_PROFILE_NAME с названием provisioning profile.
-
-58. Добавить secret KEYCHAIN_PASSWORD с новым длинным случайным паролем.
-
-59. Добавить secret APP_STORE_CONNECT_API_KEY_ID со значением Key ID.
-
-60. Добавить secret APP_STORE_CONNECT_ISSUER_ID со значением Issuer ID.
-
-61. В PowerShell выполнить команду для файла .p8:
-
-   [Convert]::ToBase64String([IO.File]::ReadAllBytes('.\AuthKey_ИМЯ.p8'))
-
-62. Скопировать полученную строку.
-
-63. Добавить secret APP_STORE_CONNECT_PRIVATE_KEY_BASE64 с этой строкой.
-
-64. Открыть https://github.com/Denn44ikk/apple/actions/workflows/ios-release.yml.
-
-65. Нажать Run workflow.
-
-66. Включить Upload the signed IPA to App Store Connect.
-
-67. Нажать Run workflow.
-
-68. Дождаться статуса Success.
-
-69. Открыть https://appstoreconnect.apple.com/.
-
-70. Открыть Apps → Мой план → TestFlight.
-
-71. Дождаться обработки сборки.
-
-72. Добавить Apple Account iPhone в список тестировщиков.
-
-73. На iPhone установить TestFlight из App Store.
-
-74. Открыть приглашение TestFlight.
-
-75. Нажать Install рядом с приложением Мой план.
+13. Открыть приглашение в TestFlight и нажать Install рядом с приложением «Мой план».
